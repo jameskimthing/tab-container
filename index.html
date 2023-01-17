@@ -2,38 +2,58 @@
 <html>
   <head>
     <title>Container</title>
-    <link
-      rel="icon"
-      onerror="faviconError()"
-      href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9oFFAADATTAuQQAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAEklEQVQ4y2NgGAWjYBSMAggAAAQQAAGFP6pyAAAAAElFTkSuQmCC"
-    />
+    <link rel="icon" onerror="faviconError()" />
   </head>
   <body>
     <h1>The Great Container Tab</h1>
-    <input type="text" oninput="changeTitle(this.value)" placeholder="Title" />
+    <button onclick="removeTitle()">Make title invisible</button>
     <input
+      id="title"
+      type="text"
+      oninput="changeTitle(this.value)"
+      placeholder="Title"
+    />
+    <input
+      id="favicon"
       type="text"
       oninput="changeFavicon(this.value)"
-      placeholder="Favicon"
+      placeholder="Favicon Link (ex: google.com)"
     />
-    <button onpointerup="removeTitle()">Make title blank</button>
   </body>
+
   <script>
+    function updateUrl(title, favicon) {
+      queryString = window.location.search;
+      urlParams = new URLSearchParams(queryString);
+
+      if (title) favicon = urlParams.get("favicon");
+      else if (favicon) title = urlParams.get("title");
+
+      const params = `?title=${title}&favicon=${favicon}`;
+      window.history.pushState("", "", params);
+    }
+
     function removeTitle() {
+      const input = document.getElementById("title");
+      input.value = "";
+
       document.title = "‎";
+      updateUrl("‎", "");
     }
 
     function changeTitle(e) {
+      updateUrl(e, "");
       if (e) document.title = e;
       else document.title = "Container";
     }
 
     function changeFavicon(e) {
+      updateUrl("", e);
       let expression =
         /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
       let regex = new RegExp(expression);
-
       let link = document.querySelector("link");
+
       if (e.match(regex)) {
         if (e.endsWith("/")) e += "favicon.ico";
         else e += "/favicon.ico";
@@ -42,10 +62,26 @@
 
         link.href = e;
       } else {
-        console.log("NOPE");
         link.href =
           "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9oFFAADATTAuQQAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAEklEQVQ4y2NgGAWjYBSMAggAAAQQAAGFP6pyAAAAAElFTkSuQmCC";
       }
     }
+
+    let queryString = window.location.search;
+    let urlParams = new URLSearchParams(queryString);
+
+    const title = urlParams.get("title");
+    if (title) {
+      document.title = title;
+      const input = document.getElementById("title");
+      input.value = title;
+    }
+
+    const favicon = urlParams.get("favicon");
+    if (favicon) {
+      changeFavicon(favicon);
+      const input = document.getElementById("favicon");
+      input.value = favicon;
+    } else changeFavicon("");
   </script>
 </html>
