@@ -42,6 +42,7 @@
     }
 
     function changeTitle(e) {
+      e.replace("‎", "");
       updateUrl(e, "");
       if (e) document.title = e;
       else document.title = "Container";
