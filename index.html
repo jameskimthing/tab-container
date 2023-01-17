@@ -22,12 +22,18 @@
   </body>
 
   <script>
-    function updateUrl(title, favicon) {
+    // title = 0
+    // favicon = 1
+    function updateUrl(title, favicon, type = -1) {
       queryString = window.location.search;
       urlParams = new URLSearchParams(queryString);
 
       if (title) favicon = urlParams.get("favicon");
       else if (favicon) title = urlParams.get("title");
+      else {
+        if (type === 0) favicon = urlParams.get("favicon");
+        else if (type === 1) title = urlParams.get("title");
+      }
 
       const params = `?title=${title}&favicon=${favicon}`;
       window.history.pushState("", "", params);
@@ -38,18 +44,18 @@
       input.value = "";
 
       document.title = "‎";
-      updateUrl("‎", "");
+      updateUrl("‎", "", 0);
     }
 
     function changeTitle(e) {
       e.replace("‎", "");
-      updateUrl(e, "");
+      updateUrl(e, "", 0);
       if (e) document.title = e;
       else document.title = "Container";
     }
 
     function changeFavicon(e) {
-      updateUrl("", e);
+      updateUrl("", e, 1);
       let expression =
         /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
       let regex = new RegExp(expression);
