@@ -3,22 +3,70 @@
   <head>
     <title>Container</title>
     <link rel="icon" onerror="faviconError()" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+      }
+
+      h1 {
+        font-size: 2em;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+        /* text-align: center; */
+      }
+
+      button {
+        background-color: #333;
+        color: #fff;
+        margin-left: 10px;
+        margin-bottom: 10px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: fit-content;
+      }
+
+      input {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-left: 10px;
+        margin-top: 5px;
+        /* width: 100%; */
+        box-sizing: border-box;
+      }
+
+      input[type="text"]::placeholder {
+        color: #ccc;
+      }
+
+      #inputs {
+        display: flex;
+        width: fit-content;
+        flex-direction: column;
+      }
+    </style>
   </head>
   <body>
     <h1>The Great Container Tab</h1>
-    <button onclick="removeTitle()">Make title invisible</button>
-    <input
-      id="title"
-      type="text"
-      oninput="changeTitle(this.value)"
-      placeholder="Title"
-    />
-    <input
-      id="favicon"
-      type="text"
-      oninput="changeFavicon(this.value)"
-      placeholder="Favicon Link (ex: google.com)"
-    />
+    <div id="inputs">
+      <button onclick="removeTitle()">Make title invisible</button>
+      <input
+        id="title"
+        type="text"
+        oninput="changeTitle(this.value)"
+        placeholder="Title"
+      />
+      <input
+        id="favicon"
+        type="text"
+        oninput="changeFavicon(this.value)"
+        placeholder="Favicon Link (ex: google.com)"
+      />
+    </div>
   </body>
 
   <script>
