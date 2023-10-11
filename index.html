@@ -31,6 +31,8 @@
 
   <script>
     const urlParams = new URLSearchParams(window.location.search);
+    if (!urlParams.has("favicon")) urlParams.set("favicon", "");
+    if (!urlParams.has("color")) urlParams.set("color", "");
 
     let title = urlParams.get("title");
     document.getElementById("title").value = title === emptyTitle ? "" : title;
