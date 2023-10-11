@@ -4,8 +4,8 @@
     <title></title>
     <link rel="icon" />
     <script type="text/javascript" src="scripts/constants.js"></script>
-    <script type="text/javascript" src="scripts/script.js"></script>
     <script type="text/javascript" src="scripts/utilities.js"></script>
+    <script type="text/javascript" src="scripts/script.js"></script>
     <script type="text/javascript" src="scripts/icons.js"></script>
     <link rel="stylesheet" href="/styles.css" />
   </head>
@@ -24,7 +24,6 @@
         oninput="setFavicon(this.value)"
         placeholder="Favicon Link (ex: google.com)"
       />
-
       <section id="favicons" class="favicons-container"></section>
       <section id="colors" class="colors-container"></section>
     </div>
@@ -45,11 +44,6 @@
       faviconInput.value = favicon;
       setFavicon(favicon);
     }
-
-    // document.getElementById("favicon").value = favicon.startsWith("[fav]")
-    //   ? ""
-    //   : favicon;
-    // setFavicon(favicon);
 
     let colorParam = urlParams.get("color");
     currentColor = colorParam ?? colors[0];
