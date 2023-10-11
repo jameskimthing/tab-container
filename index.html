@@ -1,142 +1,60 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Container</title>
-    <link rel="icon" onerror="faviconError()" />
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #f0f0f0;
-      }
-
-      h1 {
-        font-size: 2em;
-        color: #333;
-        margin: 0;
-        padding: 20px;
-        /* text-align: center; */
-      }
-
-      button {
-        background-color: #333;
-        color: #fff;
-        margin-left: 10px;
-        margin-bottom: 10px;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        width: fit-content;
-      }
-
-      input {
-        padding: 10px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        margin-left: 10px;
-        margin-top: 5px;
-        /* width: 100%; */
-        box-sizing: border-box;
-      }
-
-      input[type="text"]::placeholder {
-        color: #ccc;
-      }
-
-      #inputs {
-        display: flex;
-        width: fit-content;
-        flex-direction: column;
-      }
-    </style>
+    <title></title>
+    <link rel="icon" />
+    <script type="text/javascript" src="scripts/constants.js"></script>
+    <script type="text/javascript" src="scripts/script.js"></script>
+    <script type="text/javascript" src="scripts/utilities.js"></script>
+    <script type="text/javascript" src="scripts/icons.js"></script>
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <h1>The Great Container Tab</h1>
     <div id="inputs">
-      <button onclick="removeTitle()">Make title invisible</button>
       <input
         id="title"
         type="text"
-        oninput="changeTitle(this.value)"
+        oninput="setTitle(this.value)"
         placeholder="Title"
       />
       <input
         id="favicon"
         type="text"
-        oninput="changeFavicon(this.value)"
+        oninput="setFavicon(this.value)"
         placeholder="Favicon Link (ex: google.com)"
       />
+
+      <section id="favicons" class="favicons-container"></section>
+      <section id="colors" class="colors-container"></section>
     </div>
   </body>
 
   <script>
-    // title = 0
-    // favicon = 1
-    function updateUrl(title, favicon, type = -1) {
-      queryString = window.location.search;
-      urlParams = new URLSearchParams(queryString);
+    const urlParams = new URLSearchParams(window.location.search);
 
-      if (title) favicon = urlParams.get("favicon");
-      else if (favicon) title = urlParams.get("title");
-      else {
-        if (type === 0) favicon = urlParams.get("favicon");
-        else if (type === 1) title = urlParams.get("title");
-      }
+    let title = urlParams.get("title");
+    document.getElementById("title").value = title === emptyTitle ? "" : title;
+    setTitle(title);
 
-      const params = `?title=${title}&favicon=${favicon}`;
-      window.history.pushState("", "", params);
+    let favicon = urlParams.get("favicon");
+    const faviconInput = document.getElementById("favicon");
+    if (favicon.startsWith("[fav]")) {
+      faviconInput.value = "";
+    } else {
+      faviconInput.value = favicon;
+      setFavicon(favicon);
     }
 
-    function removeTitle() {
-      const input = document.getElementById("title");
-      input.value = "";
+    // document.getElementById("favicon").value = favicon.startsWith("[fav]")
+    //   ? ""
+    //   : favicon;
+    // setFavicon(favicon);
 
-      document.title = "‎";
-      updateUrl("‎", "", 0);
-    }
+    let colorParam = urlParams.get("color");
+    currentColor = colorParam ?? colors[0];
 
-    function changeTitle(e) {
-      e.replace("‎", "");
-      updateUrl(e, "", 0);
-      if (e) document.title = e;
-      else document.title = "Container";
-    }
-
-    function changeFavicon(e) {
-      updateUrl("", e, 1);
-      let expression =
-        /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
-      let regex = new RegExp(expression);
-      let link = document.querySelector("link");
-
-      if (e.match(regex)) {
-        if (e.endsWith("/")) e += "favicon.ico";
-        else e += "/favicon.ico";
-
-        if (!e.startsWith("https://")) e = "https://" + e;
-
-        link.href = e;
-      } else {
-        link.href =
-          "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9oFFAADATTAuQQAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAEklEQVQ4y2NgGAWjYBSMAggAAAQQAAGFP6pyAAAAAElFTkSuQmCC";
-      }
-    }
-
-    let queryString = window.location.search;
-    let urlParams = new URLSearchParams(queryString);
-
-    const title = urlParams.get("title");
-    if (title) {
-      document.title = title;
-      const input = document.getElementById("title");
-      input.value = title;
-    }
-
-    const favicon = urlParams.get("favicon");
-    if (favicon) {
-      changeFavicon(favicon);
-      const input = document.getElementById("favicon");
-      input.value = favicon;
-    } else changeFavicon("");
+    initializeIcons();
+    initializeColors();
   </script>
 </html>
